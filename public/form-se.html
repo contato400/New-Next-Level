@@ -1,0 +1,171 @@
+<!-- ============ FORMULÁRIO EM ETAPAS (modal claro) ============ -->
+<div id="seFormOverlay" class="se-form-overlay" aria-hidden="true">
+  <div class="se-form-modal" role="dialog" aria-modal="true" aria-label="Inscrição no Webinário">
+    <button type="button" class="se-form-close" id="seFormClose" aria-label="Fechar">&times;</button>
+    <div class="se-form-card">
+      <div class="se-form-body">
+
+        <div id="seProgressArea">
+          <div class="se-progress-bar"><div class="se-progress-fill" id="seProgressFill"></div></div>
+        </div>
+
+        <!-- ETAPA 01 — ESPECIALIDADE -->
+        <div class="se-step active" data-step="1">
+          <h2 class="se-step-title">Qual a sua especialidade?</h2>
+          <select id="seEspecialidade">
+            <option value="" disabled selected>Selecione sua especialidade</option>
+            <option value="Dermatologia">Dermatologia</option>
+            <option value="Cirurgia Vascular">Cirurgia Vascular</option>
+            <option value="Oftalmologia">Oftalmologia</option>
+            <option value="Tricologia">Tricologia</option>
+            <option value="Cirurgia Plástica">Cirurgia Plástica</option>
+            <option value="Endocrinologia">Endocrinologia</option>
+            <option value="Nutrologia">Nutrologia</option>
+            <option value="Medicina Estética">Medicina Estética</option>
+            <option value="Outro">Outro</option>
+          </select>
+          <div class="se-field-error" id="seErrEspecialidade">Por favor, selecione uma opção.</div>
+
+          <div id="seOutroWrap" style="display:none;">
+            <label class="se-field-label">Qual?</label>
+            <input type="text" id="seEspecialidadeOutro" placeholder="Escreva sua especialidade">
+            <div class="se-field-error" id="seErrEspecialidadeOutro">Por favor, escreva sua especialidade.</div>
+          </div>
+
+          <div class="se-btn-row">
+            <button type="button" class="se-cta" data-next>Continuar</button>
+          </div>
+        </div>
+
+        <!-- ETAPA 02 — FATURAMENTO -->
+        <div class="se-step" data-step="2">
+          <h2 class="se-step-title">Para traçarmos o melhor Plano, qual é o seu faturamento médio mensal?</h2>
+          <div class="se-options" id="seOptsFaturamento">
+            <div class="se-option-card" data-value="Menos de 19 mil reais"><span class="se-radio"></span><span>Menos de 19 mil reais</span></div>
+            <div class="se-option-card" data-value="Entre 20 mil e 29 mil reais"><span class="se-radio"></span><span>Entre 20 mil e 29 mil reais</span></div>
+            <div class="se-option-card" data-value="Entre 30 mil e 49 mil reais"><span class="se-radio"></span><span>Entre 30 mil e 49 mil reais</span></div>
+            <div class="se-option-card" data-value="Entre 50 mil e 99 mil reais"><span class="se-radio"></span><span>Entre 50 mil e 99 mil reais</span></div>
+            <div class="se-option-card" data-value="Acima de 100 mil reais"><span class="se-radio"></span><span>Acima de 100 mil reais</span></div>
+          </div>
+          <input type="hidden" id="seFaturamento" value="">
+          <div class="se-field-error" id="seErrFaturamento">Por favor, selecione uma opção.</div>
+          <div class="se-btn-row">
+            <button type="button" class="se-btn-back" data-back>Voltar</button>
+            <button type="button" class="se-cta" data-next>Continuar</button>
+          </div>
+        </div>
+
+        <!-- ETAPA 03 — CONTATO -->
+        <div class="se-step" data-step="3">
+          <h2 class="se-step-title">Falta pouco! Confirme seus dados para garantir o acesso</h2>
+          <label class="se-field-label">Nome completo</label>
+          <input type="text" id="seNome" placeholder="Seu nome">
+          <div class="se-field-error" id="seErrNome">Por favor, preencha seu nome.</div>
+          <label class="se-field-label">Telefone / WhatsApp</label>
+          <input type="tel" id="seTelefone" placeholder="+55 (31) 99999-9999">
+          <div class="se-field-error" id="seErrTelefone">Por favor, preencha um telefone válido.</div>
+          <label class="se-field-label">Instagram</label>
+          <input type="text" id="seInstagram" placeholder="@seuperfil">
+          <div class="se-field-error" id="seErrInstagram">Por favor, informe seu Instagram.</div>
+          <div class="se-btn-row">
+            <button type="button" class="se-btn-back" data-back>Voltar</button>
+            <button type="button" class="se-cta" id="seBtnFinal">Garantir meu acesso</button>
+          </div>
+        </div>
+
+        <div class="se-status-msg" id="seStatusMsg">
+          <div class="se-spinner"></div>
+          <p>Enviando suas informações…</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .se-form-overlay, .se-form-overlay *, .se-form-overlay *::before, .se-form-overlay *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  .se-form-overlay {
+    --se-gold: #c9a52c; --se-gold-soft: #d8b768;
+    --se-bg-card: #ffffff; --se-bg-input: #f6f3ec;
+    --se-border: rgba(10,10,10,0.12); --se-border-2: rgba(201,165,44,0.55);
+    --se-text: #0a0a0a; --se-muted: #6b6b6b; --se-error: #c0392b;
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(10,10,10,0.82); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    display: none; align-items: flex-start; justify-content: center; overflow-y: auto;
+    padding: 40px 16px; font-family: 'Albert Sans', system-ui, sans-serif;
+  }
+  .se-form-overlay.open { display: flex; animation: seOverlayIn 0.3s ease both; }
+  @keyframes seOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+  .se-form-modal { position: relative; width: 100%; max-width: 540px; margin: auto; animation: seModalIn 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes seModalIn { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .se-form-close {
+    position: absolute; top: -14px; right: -8px; width: 38px; height: 38px; border-radius: 50%;
+    background: #0a0a0a; border: none; color: #fff; font-size: 22px; line-height: 1; cursor: pointer; z-index: 5;
+    transition: background 0.2s ease, transform 0.15s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .se-form-close:hover { background: var(--se-gold); color: #0a0a0a; transform: scale(1.06); }
+  .se-form-card { background: var(--se-bg-card); border: 1px solid var(--se-border); border-radius: 6px; overflow: hidden; position: relative; }
+  .se-form-card::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--se-gold), var(--se-gold-soft), var(--se-gold)); }
+  .se-form-body { padding: 40px 38px; }
+  .se-progress-bar { height: 3px; width: 100%; background: rgba(10,10,10,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 32px; }
+  .se-progress-fill { height: 100%; width: 33%; background: var(--se-gold); border-radius: 3px; transition: width 0.4s ease; }
+  .se-step { display: none; animation: seFadeIn 0.4s ease both; }
+  .se-step.active { display: block; }
+  @keyframes seFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .se-step-title {
+    font-family: 'Albert Sans', sans-serif; font-size: 23px; font-weight: 600; line-height: 1.25;
+    letter-spacing: -0.02em; color: var(--se-text); margin-bottom: 24px;
+  }
+  .se-field-label { display: block; font-size: 13px; font-weight: 500; color: var(--se-muted); margin-bottom: 7px; }
+  .se-form-overlay input[type="text"], .se-form-overlay input[type="tel"], .se-form-overlay select {
+    width: 100%; background: var(--se-bg-input); border: 1px solid var(--se-border); border-radius: 8px;
+    padding: 13px 15px; font-family: 'Albert Sans', sans-serif; font-size: 15px; color: var(--se-text);
+    margin-bottom: 18px; transition: border-color 0.2s ease;
+  }
+  .se-form-overlay input::placeholder { color: #a8a39a; }
+  .se-form-overlay input:focus, .se-form-overlay select:focus { outline: none; border-color: var(--se-border-2); }
+  .se-form-overlay select {
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23c9a52c' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; cursor: pointer;
+  }
+  .se-options { margin-bottom: 8px; }
+  .se-option-card {
+    display: flex; align-items: center; gap: 12px; background: var(--se-bg-input); border: 1px solid var(--se-border);
+    border-radius: 9px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease; font-size: 14.5px; line-height: 1.4; color: var(--se-text);
+  }
+  .se-option-card:hover { border-color: var(--se-border-2); }
+  .se-option-card.selected { border-color: var(--se-gold); background: rgba(201,165,44,0.08); }
+  .se-radio { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(10,10,10,0.25); position: relative; transition: border-color 0.18s ease; }
+  .se-option-card.selected .se-radio { border-color: var(--se-gold); }
+  .se-option-card.selected .se-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-radius: 50%; background: var(--se-gold); }
+  .se-btn-row { display: flex; gap: 10px; margin-top: 6px; }
+  .se-cta {
+    flex: 1; background: #0a0a0a; color: #fff; border: 1px solid #0a0a0a; border-radius: 100px; padding: 15px 20px;
+    font-family: 'Albert Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .se-cta:hover { background: var(--se-gold); border-color: var(--se-gold); color: #0a0a0a; }
+  .se-btn-back {
+    flex: 0 0 auto; background: transparent; color: var(--se-muted); border: 1px solid var(--se-border);
+    border-radius: 100px; padding: 15px 20px; font-family: 'Albert Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .se-btn-back:hover { border-color: #0a0a0a; color: #0a0a0a; }
+  .se-field-error { color: var(--se-error); font-size: 12px; margin: -12px 0 14px; display: none; }
+  .se-field-error.show { display: block; }
+  .se-status-msg { display: none; text-align: center; padding: 30px 10px; }
+  .se-status-msg.show { display: block; }
+  .se-spinner { width: 38px; height: 38px; border: 3px solid rgba(10,10,10,0.12); border-top-color: var(--se-gold); border-radius: 50%; margin: 0 auto 18px; animation: seSpin 0.8s linear infinite; }
+  @keyframes seSpin { to { transform: rotate(360deg); } }
+  .se-status-msg p { font-family: 'Albert Sans', sans-serif; font-size: 17px; color: var(--se-text); font-weight: 500; }
+  @media (max-width: 600px) {
+    .se-form-overlay { padding: 24px 12px; }
+    .se-form-body { padding: 30px 22px; }
+    .se-step-title { font-size: 20px; }
+    .se-form-close { top: 6px; right: 6px; }
+  }
+</style>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import FormSE from './FormSE'
 
 export default function Home() {
   const [html, setHtml] = useState('')
@@ -24,38 +25,28 @@ export default function Home() {
     if (html && containerRef.current && !initialized.current) {
       initialized.current = true
 
-      // Carregar script do formulário LeadConnector
-      const formScript = document.createElement('script')
-      formScript.src = 'https://link.msgsndr.com/js/form_embed.js'
-      formScript.async = true
-      document.body.appendChild(formScript)
-
-      // Configurar botões para abrir o modal
+      // Religa os CTAs da página para abrir o NOVO formulário em etapas (FormSE),
+      // via window.abrirFormularioWebinar(), em vez do antigo #formModal.
       setTimeout(() => {
         const buttons = document.querySelectorAll('a.elementor-button')
-        const formModal = document.getElementById('formModal')
-
-        if (formModal) {
-          buttons.forEach(btn => {
-            btn.onclick = function(e) {
-              e.preventDefault()
-              e.stopPropagation()
-              formModal.style.display = 'block'
-              return false
+        buttons.forEach(btn => {
+          btn.onclick = function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+            if (typeof window.abrirFormularioWebinar === 'function') {
+              window.abrirFormularioWebinar()
             }
-          })
-
-          formModal.onclick = function(e) {
-            if (e.target === formModal) {
-              formModal.style.display = 'none'
-            }
+            return false
           }
-        }
+        })
       }, 500)
     }
   }, [html])
 
   return (
-    <div ref={containerRef} dangerouslySetInnerHTML={{ __html: html }} />
+    <>
+      <div ref={containerRef} dangerouslySetInnerHTML={{ __html: html }} />
+      <FormSE />
+    </>
   )
 }

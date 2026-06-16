@@ -1,0 +1,103 @@
+<!-- ==================== BANNER DE ESCASSEZ + NOTIFICAÇÕES ==================== -->
+<style>
+  #scarcity-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #b91c1c;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px 16px;
+    z-index: 99999;
+    line-height: 1.3;
+    letter-spacing: 0.2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  #scarcity-topbar .vagas-num {
+    display: inline-block;
+    font-weight: 800;
+    background: rgba(255,255,255,0.18);
+    border-radius: 4px;
+    padding: 0 7px;
+    margin: 0 2px;
+  }
+
+  body { padding-top: 42px !important; }
+
+  #scarcity-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    max-width: 320px;
+    background: #16a34a;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    padding: 14px 16px 14px 14px;
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+  #scarcity-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #scarcity-notification .notif-avatar {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #scarcity-notification .notif-avatar svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  #scarcity-notification .notif-text { font-size: 13.5px; line-height: 1.35; }
+  #scarcity-notification .notif-text strong { color: #fff; }
+  #scarcity-notification .notif-text .notif-action { color: #eafff0; font-weight: 600; }
+  #scarcity-notification .notif-time {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+  }
+
+  @media (max-width: 480px) {
+    #scarcity-topbar { font-size: 13px; padding: 9px 12px; }
+    body { padding-top: 40px !important; }
+    #scarcity-notification { left: 12px; right: 12px; max-width: none; bottom: 12px; }
+  }
+</style>
+
+<div id="scarcity-topbar">
+  <span class="vagas-num" id="vagas-count">7</span> vagas disponíveis para Médicos da Estética
+</div>
+
+<div id="scarcity-notification">
+  <div class="notif-avatar">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 6L9 17l-5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="notif-text">
+    <strong id="notif-nome">Ana</strong> de <span id="notif-cidade">São Paulo</span><br>
+    <span class="notif-action">acabou de agendar a consultoria gratuita</span>
+    <span class="notif-time" id="notif-time">agora mesmo</span>
+  </div>
+</div>
