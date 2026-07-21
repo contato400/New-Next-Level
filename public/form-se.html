@@ -1,355 +1,190 @@
-<!--
-  ════════════════════════════════════════════════════════════════════
-  FORMULÁRIO FNF — visual nativo do Lead Form Instantâneo do Facebook
-  ════════════════════════════════════════════════════════════════════
-
-  MODAL / POPUP. Abre pelos botões (CTA) do site via
-  window.abrirFormularioWebinar(). Uma pergunta por tela, opção única
-  que AVANÇA SOZINHA ao tocar (estilo Facebook puro).
-
-  ── HEADER / LOGO ──
-  Troque a imagem do topo editando o atributo src de #fnfHeaderImg.
-  Pode ser logo, banner ou foto. Tamanho recomendado: 1200x400px.
-
-  TRACKING: webhook ao ENTRAR em cada etapa. A etapa de contato coleta
-  nome, telefone, e-mail e instagram, e envia ao tocar em "Enviar".
-
-  OBS: o <script> deste formulário vive em /form-se.js (mesma origem →
-  permitido pela CSP). Este arquivo é apenas markup + <style>.
-  ════════════════════════════════════════════════════════════════════
+<!-- ============ FORMULÁRIO EM ETAPAS (modal claro) ============
+  Formulário SE original (visual dourado/preto) com a Lógica Condicional 2.0:
+  a etapa de PLANTÃO (data-step="4") só aparece para médico com faturamento
+  abaixo de 30 mil. O <script> vive em /form-se.js (mesma origem → CSP ok).
 -->
+<div id="seFormOverlay" class="se-form-overlay" aria-hidden="true">
+  <div class="se-form-modal" role="dialog" aria-modal="true" aria-label="Inscrição no Webinário">
+    <button type="button" class="se-form-close" id="seFormClose" aria-label="Fechar">&times;</button>
+    <div class="se-form-card">
+      <div class="se-form-body">
 
-<div id="fnfOverlay" class="fnf-overlay" aria-hidden="true">
- <div class="fnf-modal" role="dialog" aria-modal="true" aria-label="Formulário de inscrição">
-  <button type="button" class="fnf-close" id="fnfClose" aria-label="Fechar">&times;</button>
-  <div class="fnf-form-wrap">
-
-    <!-- HEADER -->
-    <div class="fnf-tempo">Tempo estimado: 1 minuto</div>
-
-    <div class="fnf-form-body">
-
-      <!-- PROGRESS -->
-      <div id="fnfProgressArea">
-        <div class="fnf-progress-bar">
-          <div class="fnf-progress-fill" id="fnfProgressFill"></div>
+        <div id="seProgressArea">
+          <div class="se-progress-bar"><div class="se-progress-fill" id="seProgressFill"></div></div>
         </div>
-      </div>
 
-      <!-- ETAPA 01 -->
-      <div class="fnf-step active" data-step="1">
-        <h2 class="fnf-step-title">Atrair Pacientes Qualificados e fechar Planos de Ticket Alto na 1ª Consulta, te ajudaria hoje?</h2>
-        <div class="fnf-options" data-field="ajuda">
-          <div class="fnf-option-card" data-value="Sim, vai me ajudar!"><span class="fnf-radio"></span><span class="fnf-opt-text">Sim, vai me ajudar!</span></div>
-          <div class="fnf-option-card" data-value="Não tenho interesse" data-dq="1"><span class="fnf-radio"></span><span class="fnf-opt-text">Não tenho interesse</span></div>
-        </div>
-        <div class="fnf-field-error">Por favor, selecione uma opção.</div>
-      </div>
+        <!-- ETAPA 01 — ESPECIALIDADE -->
+        <div class="se-step active" data-step="1">
+          <h2 class="se-step-title">Qual a sua especialidade?</h2>
+          <select id="seEspecialidade">
+            <option value="" disabled selected>Selecione sua especialidade</option>
+            <option value="Dermatologia">Dermatologia</option>
+            <option value="Cirurgia Vascular">Cirurgia Vascular</option>
+            <option value="Oftalmologia">Oftalmologia</option>
+            <option value="Tricologia">Tricologia</option>
+            <option value="Cirurgia Plástica">Cirurgia Plástica</option>
+            <option value="Endocrinologia">Endocrinologia</option>
+            <option value="Nutrologia">Nutrologia</option>
+            <option value="Medicina Estética">Medicina Estética</option>
+            <option value="Outro">Outro</option>
+          </select>
+          <div class="se-field-error" id="seErrEspecialidade">Por favor, selecione uma opção.</div>
 
-      <!-- ETAPA 02 -->
-      <div class="fnf-step" data-step="2">
-        <h2 class="fnf-step-title">Qual a sua Especialidade?</h2>
-        <div class="fnf-options" data-field="especialidade">
-          <div class="fnf-option-card" data-value="Dermatologista" data-tipo="medico"><span class="fnf-radio"></span><span class="fnf-opt-text">Dermatologista</span></div>
-          <div class="fnf-option-card" data-value="Nutrologista" data-tipo="medico"><span class="fnf-radio"></span><span class="fnf-opt-text">Nutrologista</span></div>
-          <div class="fnf-option-card" data-value="Tricologista" data-tipo="medico"><span class="fnf-radio"></span><span class="fnf-opt-text">Tricologista</span></div>
-          <div class="fnf-option-card" data-value="Endocrinologista" data-tipo="medico"><span class="fnf-radio"></span><span class="fnf-opt-text">Endocrinologista</span></div>
-          <div class="fnf-option-card" data-value="Ginecologista" data-tipo="medico"><span class="fnf-radio"></span><span class="fnf-opt-text">Ginecologista</span></div>
-          <div class="fnf-option-card" data-value="Oftalmologista" data-tipo="medico"><span class="fnf-radio"></span><span class="fnf-opt-text">Oftalmologista</span></div>
-          <div class="fnf-option-card" data-value="Outro" data-tipo="outro" data-abre-area="1"><span class="fnf-radio"></span><span class="fnf-opt-text">Outro</span></div>
-        </div>
-        <div class="fnf-area-wrap" id="fnfAreaWrap" style="display:none;">
-          <div class="fnf-input-label" style="margin-top:18px;">Qual a sua área de atuação?</div>
-          <div class="fnf-options" data-field="area" data-subarea="1">
-            <div class="fnf-option-card" data-value="Biomédico(a)" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Biomédico(a)</span></div>
-            <div class="fnf-option-card" data-value="Dentista / Odonto" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Dentista / Odonto</span></div>
-            <div class="fnf-option-card" data-value="Bucomaxilo" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Bucomaxilo</span></div>
-            <div class="fnf-option-card" data-value="Enfermeiro(a)" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Enfermeiro(a)</span></div>
-            <div class="fnf-option-card" data-value="Farmacêutico(a)" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Farmacêutico(a)</span></div>
-            <div class="fnf-option-card" data-value="Fisioterapeuta" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Fisioterapeuta</span></div>
-            <div class="fnf-option-card" data-value="Esteticista" data-tipo="nm"><span class="fnf-radio"></span><span class="fnf-opt-text">Esteticista</span></div>
-            <div class="fnf-option-card" data-value="Outra área" data-tipo="outro"><span class="fnf-radio"></span><span class="fnf-opt-text">Outra área</span></div>
+          <div id="seOutroWrap" style="display:none;">
+            <label class="se-field-label">Qual?</label>
+            <input type="text" id="seEspecialidadeOutro" placeholder="Escreva sua especialidade">
+            <div class="se-field-error" id="seErrEspecialidadeOutro">Por favor, escreva sua especialidade.</div>
+          </div>
+
+          <div class="se-btn-row">
+            <button type="button" class="se-cta" data-next>Continuar</button>
           </div>
         </div>
-        <div class="fnf-field-error">Por favor, selecione uma opção.</div>
-      </div>
 
-      <!-- ETAPA 03 REMOVIDA (Hoje você é) -->
-
-      <!-- ETAPA 04 -->
-      <div class="fnf-step" data-step="4">
-        <h2 class="fnf-step-title">Qual o seu maior DESAFIO atual?</h2>
-        <div class="fnf-options" data-field="desafio">
-          <div class="fnf-option-card" data-value="Dificuldade de atrair Leads Qualificados e Interessados"><span class="fnf-radio"></span><span class="fnf-opt-text">Dificuldade de atrair Leads Qualificados e Interessados</span></div>
-          <div class="fnf-option-card" data-value="Baixo comparecimento dos Agendamentos"><span class="fnf-radio"></span><span class="fnf-opt-text">Baixo comparecimento dos Agendamentos</span></div>
-          <div class="fnf-option-card" data-value="Poucos Agendamentos Semanais"><span class="fnf-radio"></span><span class="fnf-opt-text">Poucos Agendamentos Semanais</span></div>
-          <div class="fnf-option-card" data-value="Cobro menos do que gostaria"><span class="fnf-radio"></span><span class="fnf-opt-text">Cobro menos do que gostaria</span></div>
-          <div class="fnf-option-card" data-value="Dificuldade de contratar e treinar minha Equipe"><span class="fnf-radio"></span><span class="fnf-opt-text">Dificuldade de contratar e treinar minha Equipe</span></div>
-          <div class="fnf-option-card" data-value="Outro"><span class="fnf-radio"></span><span class="fnf-opt-text">Outro</span></div>
+        <!-- ETAPA 02 — FATURAMENTO -->
+        <div class="se-step" data-step="2">
+          <h2 class="se-step-title">Para traçarmos o melhor Plano, qual é o seu faturamento médio mensal?</h2>
+          <div class="se-options" id="seOptsFaturamento">
+            <div class="se-option-card" data-value="Menos de 19 mil reais"><span class="se-radio"></span><span>Menos de 19 mil reais</span></div>
+            <div class="se-option-card" data-value="Entre 20 mil e 29 mil reais"><span class="se-radio"></span><span>Entre 20 mil e 29 mil reais</span></div>
+            <div class="se-option-card" data-value="Entre 30 mil e 49 mil reais"><span class="se-radio"></span><span>Entre 30 mil e 49 mil reais</span></div>
+            <div class="se-option-card" data-value="Entre 50 mil e 99 mil reais"><span class="se-radio"></span><span>Entre 50 mil e 99 mil reais</span></div>
+            <div class="se-option-card" data-value="Acima de 100 mil reais"><span class="se-radio"></span><span>Acima de 100 mil reais</span></div>
+          </div>
+          <input type="hidden" id="seFaturamento" value="">
+          <div class="se-field-error" id="seErrFaturamento">Por favor, selecione uma opção.</div>
+          <div class="se-btn-row">
+            <button type="button" class="se-btn-back" data-back>Voltar</button>
+            <button type="button" class="se-cta" data-next>Continuar</button>
+          </div>
         </div>
-        <div class="fnf-field-error">Por favor, selecione uma opção.</div>
-      </div>
 
-      <!-- ETAPA 05 -->
-      <div class="fnf-step" data-step="5">
-        <h2 class="fnf-step-title">Para traçarmos o melhor Plano, qual é o seu faturamento médio mensal?</h2>
-        <div class="fnf-options" data-field="faturamento">
-          <div class="fnf-option-card" data-value="Entre 10 e 30 mil reais mensais"><span class="fnf-radio"></span><span class="fnf-opt-text">Entre 10 e 30 mil reais mensais</span></div>
-          <div class="fnf-option-card" data-value="Entre 30 e 50 mil reais mensais"><span class="fnf-radio"></span><span class="fnf-opt-text">Entre 30 e 50 mil reais mensais</span></div>
-          <div class="fnf-option-card" data-value="Entre 50 e 70 mil reais mensais"><span class="fnf-radio"></span><span class="fnf-opt-text">Entre 50 e 70 mil reais mensais</span></div>
-          <div class="fnf-option-card" data-value="Entre 70 e 100 mil reais mensais"><span class="fnf-radio"></span><span class="fnf-opt-text">Entre 70 e 100 mil reais mensais</span></div>
-          <div class="fnf-option-card" data-value="Acima de 100 mil reais mensais"><span class="fnf-radio"></span><span class="fnf-opt-text">Acima de 100 mil reais mensais</span></div>
-          <div class="fnf-option-card" data-value="Menos de 10 mil reais"><span class="fnf-radio"></span><span class="fnf-opt-text">Menos de 10 mil reais</span></div>
+        <!-- ETAPA 04 — PLANTÃO (CONDICIONAL: só médico faturando < 30 mil) -->
+        <div class="se-step" data-step="4">
+          <h2 class="se-step-title">Pra entender melhor seus horários, hoje você também faz Plantão?</h2>
+          <div class="se-options" id="seOptsPlantao">
+            <div class="se-option-card" data-value="Sim"><span class="se-radio"></span><span>Sim</span></div>
+            <div class="se-option-card" data-value="Não"><span class="se-radio"></span><span>Não</span></div>
+          </div>
+          <input type="hidden" id="sePlantao" value="">
+          <div class="se-field-error" id="seErrPlantao">Por favor, selecione uma opção.</div>
+          <div class="se-btn-row">
+            <button type="button" class="se-btn-back" data-back>Voltar</button>
+            <button type="button" class="se-cta" data-next>Continuar</button>
+          </div>
         </div>
-        <div class="fnf-field-error">Por favor, selecione uma opção.</div>
-      </div>
 
-      <!-- ETAPA 07 (CONDICIONAL) — PLANTÃO — só médico faturando < 30 mil -->
-      <div class="fnf-step" data-step="7">
-        <h2 class="fnf-step-title">Pra entender melhor seus horários, hoje você também faz Plantão?</h2>
-        <div class="fnf-options" data-field="plantao">
-          <div class="fnf-option-card" data-value="Sim"><span class="fnf-radio"></span><span class="fnf-opt-text">Sim</span></div>
-          <div class="fnf-option-card" data-value="Não"><span class="fnf-radio"></span><span class="fnf-opt-text">Não</span></div>
+        <!-- ETAPA 03 — CONTATO -->
+        <div class="se-step" data-step="3">
+          <h2 class="se-step-title">Falta pouco! Confirme seus dados para garantir o acesso</h2>
+          <label class="se-field-label">Nome completo</label>
+          <input type="text" id="seNome" placeholder="Seu nome">
+          <div class="se-field-error" id="seErrNome">Por favor, preencha seu nome.</div>
+          <label class="se-field-label">Telefone / WhatsApp</label>
+          <input type="tel" id="seTelefone" placeholder="+55 (31) 99999-9999">
+          <div class="se-field-error" id="seErrTelefone">Por favor, preencha um telefone válido.</div>
+          <label class="se-field-label">Instagram</label>
+          <input type="text" id="seInstagram" placeholder="@seuperfil">
+          <div class="se-field-error" id="seErrInstagram">Por favor, informe seu Instagram.</div>
+          <div class="se-btn-row">
+            <button type="button" class="se-btn-back" data-back>Voltar</button>
+            <button type="button" class="se-cta" id="seBtnFinal">Garantir meu acesso</button>
+          </div>
         </div>
-        <div class="fnf-field-error">Por favor, selecione uma opção.</div>
+
+        <div class="se-status-msg" id="seStatusMsg">
+          <div class="se-spinner"></div>
+          <p>Enviando suas informações…</p>
+        </div>
+
       </div>
-
-      <!-- ETAPA 06 — DADOS DE CONTATO -->
-      <div class="fnf-step" data-step="6">
-        <h2 class="fnf-step-title">Por último, seus dados para entrarmos em contato</h2>
-
-        <label class="fnf-input-label">Nome completo</label>
-        <input type="text" class="fnf-input" id="fnfNome" placeholder="Seu nome">
-
-        <label class="fnf-input-label">Telefone / WhatsApp</label>
-        <input type="tel" class="fnf-input" id="fnfTelefone" placeholder="+55 (31) 99999-9999">
-
-        <label class="fnf-input-label">E-mail</label>
-        <input type="email" class="fnf-input" id="fnfEmail" placeholder="seu@email.com">
-
-        <label class="fnf-input-label">Instagram</label>
-        <input type="text" class="fnf-input" id="fnfInstagram" placeholder="@seuperfil">
-
-        <div class="fnf-field-error" id="fnfErrContato">Por favor, preencha todos os campos corretamente.</div>
-
-        <button type="button" class="fnf-btn-enviar" id="fnfBtnEnviar">Enviar</button>
-      </div>
-
-      <!-- NAV -->
-      <div class="fnf-nav">
-        <button type="button" class="fnf-btn-back" id="fnfBtnBack" style="visibility:hidden;">Voltar</button>
-      </div>
-
-      <!-- STATUS -->
-      <div class="fnf-status-msg" id="fnfStatusMsg">
-        <div class="fnf-spinner"></div>
-        <p>Enviando suas respostas…</p>
-      </div>
-
     </div>
-
-    <!-- FOOTER estilo FB -->
-    <div class="fnf-footer">
-      <span class="fnf-footer-lock">🔒</span>
-      <span>Suas informações estão seguras e não serão compartilhadas.</span>
-    </div>
-
   </div>
- </div>
 </div>
 
 <style>
-  /* ════════ FNF FORM — visual nativo Facebook Lead Form (modal) ════════ */
-
-  .fnf-overlay, .fnf-overlay *, .fnf-overlay *::before, .fnf-overlay *::after {
-    box-sizing: border-box; margin: 0; padding: 0;
-  }
-
-  .fnf-overlay {
-    --fnf-blue:       #1877F2;
-    --fnf-blue-dark:  #166FE5;
-    --fnf-bg-page:    #F0F2F5;
-    --fnf-card:       #FFFFFF;
-    --fnf-line:       #DADDE1;
-    --fnf-line-2:     #CCD0D5;
-    --fnf-text:       #1C1E21;
-    --fnf-muted:      #65676B;
-    --fnf-hover:      #F2F2F2;
-    --fnf-sel-bg:     #E7F0FE;
-    --fnf-error:      #D93025;
-
+  .se-form-overlay, .se-form-overlay *, .se-form-overlay *::before, .se-form-overlay *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  .se-form-overlay {
+    --se-gold: #c9a52c; --se-gold-soft: #d8b768;
+    --se-bg-card: #ffffff; --se-bg-input: #f6f3ec;
+    --se-border: rgba(10,10,10,0.12); --se-border-2: rgba(201,165,44,0.55);
+    --se-text: #0a0a0a; --se-muted: #6b6b6b; --se-error: #c0392b;
     position: fixed; inset: 0; z-index: 99999;
-    background: rgba(10,10,10,0.78);
-    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-    display: none; align-items: flex-start; justify-content: center;
-    overflow-y: auto; padding: 40px 16px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: rgba(10,10,10,0.82); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    display: none; align-items: flex-start; justify-content: center; overflow-y: auto;
+    padding: 40px 16px; font-family: 'Albert Sans', system-ui, sans-serif;
   }
-  .fnf-overlay.open { display: flex; animation: fnfOverlayIn 0.3s ease both; }
-  @keyframes fnfOverlayIn { from { opacity: 0; } to { opacity: 1; } }
-
-  .fnf-modal {
-    position: relative; width: 100%; max-width: 500px; margin: auto;
-    animation: fnfModalIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  @keyframes fnfModalIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .fnf-close {
+  .se-form-overlay.open { display: flex; animation: seOverlayIn 0.3s ease both; }
+  @keyframes seOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+  .se-form-modal { position: relative; width: 100%; max-width: 540px; margin: auto; animation: seModalIn 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  @keyframes seModalIn { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .se-form-close {
     position: absolute; top: -14px; right: -8px; width: 38px; height: 38px; border-radius: 50%;
     background: #0a0a0a; border: none; color: #fff; font-size: 22px; line-height: 1; cursor: pointer; z-index: 5;
-    display: flex; align-items: center; justify-content: center;
     transition: background 0.2s ease, transform 0.15s ease;
+    display: flex; align-items: center; justify-content: center;
   }
-  .fnf-close:hover { background: var(--fnf-blue); transform: scale(1.06); }
-
-  .fnf-form-wrap {
-    width: 100%;
-    background: var(--fnf-card);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  .se-form-close:hover { background: var(--se-gold); color: #0a0a0a; transform: scale(1.06); }
+  .se-form-card { background: var(--se-bg-card); border: 1px solid var(--se-border); border-radius: 6px; overflow: hidden; position: relative; }
+  .se-form-card::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--se-gold), var(--se-gold-soft), var(--se-gold)); }
+  .se-form-body { padding: 40px 38px; }
+  .se-progress-bar { height: 3px; width: 100%; background: rgba(10,10,10,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 32px; }
+  .se-progress-fill { height: 100%; width: 33%; background: var(--se-gold); border-radius: 3px; transition: width 0.4s ease; }
+  .se-step { display: none; animation: seFadeIn 0.4s ease both; }
+  .se-step.active { display: block; }
+  @keyframes seFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .se-step-title {
+    font-family: 'Albert Sans', sans-serif; font-size: 23px; font-weight: 600; line-height: 1.25;
+    letter-spacing: -0.02em; color: var(--se-text); margin-bottom: 24px;
   }
-
-  /* ── HEADER ── */
-  .fnf-header { position: relative; overflow: hidden; }
-  .fnf-header-img {
-    display: block; width: 100%; height: 200px; object-fit: cover;
-    object-position: center;
-    transform: scale(1.25);          /* zoom maior na foto */
-    transform-origin: center;
+  .se-field-label { display: block; font-size: 13px; font-weight: 500; color: var(--se-muted); margin-bottom: 7px; }
+  .se-form-overlay input[type="text"], .se-form-overlay input[type="tel"], .se-form-overlay select {
+    width: 100%; background: var(--se-bg-input); border: 1px solid var(--se-border); border-radius: 8px;
+    padding: 13px 15px; font-family: 'Albert Sans', sans-serif; font-size: 15px; color: var(--se-text);
+    margin-bottom: 18px; transition: border-color 0.2s ease;
   }
-  .fnf-tempo {
-    padding: 12px 16px;
-    font-size: 13px; color: var(--fnf-muted);
-    border-bottom: 1px solid var(--fnf-line);
+  .se-form-overlay input::placeholder { color: #a8a39a; }
+  .se-form-overlay input:focus, .se-form-overlay select:focus { outline: none; border-color: var(--se-border-2); }
+  .se-form-overlay select {
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23c9a52c' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; cursor: pointer;
   }
-  .fnf-header-name { font-size: 15px; font-weight: 600; color: var(--fnf-text); line-height: 1.2; }
-  .fnf-header-sub { font-size: 13px; color: var(--fnf-muted); }
-
-  /* ── BODY ── */
-  .fnf-form-body { padding: 20px 20px 8px; }
-
-  .fnf-progress-bar {
-    height: 4px; width: 100%; background: var(--fnf-line);
-    border-radius: 4px; overflow: hidden; margin-bottom: 22px;
+  .se-options { margin-bottom: 8px; }
+  .se-option-card {
+    display: flex; align-items: center; gap: 12px; background: var(--se-bg-input); border: 1px solid var(--se-border);
+    border-radius: 9px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease; font-size: 14.5px; line-height: 1.4; color: var(--se-text);
   }
-  .fnf-progress-fill {
-    height: 100%; width: 16.66%;
-    background: var(--fnf-blue);
-    border-radius: 4px; transition: width 0.35s ease;
+  .se-option-card:hover { border-color: var(--se-border-2); }
+  .se-option-card.selected { border-color: var(--se-gold); background: rgba(201,165,44,0.08); }
+  .se-radio { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(10,10,10,0.25); position: relative; transition: border-color 0.18s ease; }
+  .se-option-card.selected .se-radio { border-color: var(--se-gold); }
+  .se-option-card.selected .se-radio::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; border-radius: 50%; background: var(--se-gold); }
+  .se-btn-row { display: flex; gap: 10px; margin-top: 6px; }
+  .se-cta {
+    flex: 1; background: #0a0a0a; color: #fff; border: 1px solid #0a0a0a; border-radius: 100px; padding: 15px 20px;
+    font-family: 'Albert Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
   }
-
-  .fnf-step { display: none; animation: fnfFadeIn 0.3s ease both; }
-  .fnf-step.active { display: block; }
-  @keyframes fnfFadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .se-cta:hover { background: var(--se-gold); border-color: var(--se-gold); color: #0a0a0a; }
+  .se-btn-back {
+    flex: 0 0 auto; background: transparent; color: var(--se-muted); border: 1px solid var(--se-border);
+    border-radius: 100px; padding: 15px 20px; font-family: 'Albert Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
   }
-
-  .fnf-step-title {
-    font-size: 19px; font-weight: 700; line-height: 1.33;
-    color: var(--fnf-text); margin-bottom: 18px;
-  }
-
-  /* ── OPÇÕES estilo FB ── */
-  .fnf-options { margin-bottom: 4px; }
-  .fnf-option-card {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--fnf-card);
-    border: 1px solid var(--fnf-line-2);
-    border-radius: 8px; padding: 13px 14px; margin-bottom: 8px;
-    cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease;
-    font-size: 15px; line-height: 1.35; color: var(--fnf-text);
-  }
-  .fnf-option-card:hover { background: var(--fnf-hover); }
-  .fnf-option-card.selected {
-    border-color: var(--fnf-blue);
-    background: var(--fnf-sel-bg);
-    box-shadow: inset 0 0 0 1px var(--fnf-blue);
-  }
-  .fnf-radio {
-    flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
-    border: 2px solid var(--fnf-line-2); position: relative; transition: border-color 0.15s ease;
-  }
-  .fnf-option-card.selected .fnf-radio { border-color: var(--fnf-blue); }
-  .fnf-option-card.selected .fnf-radio::after {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); width: 10px; height: 10px;
-    border-radius: 50%; background: var(--fnf-blue);
-  }
-  .fnf-opt-text { flex: 1; }
-
-  .fnf-nav { margin-top: 10px; min-height: 22px; padding-bottom: 4px; }
-  .fnf-btn-back {
-    background: transparent; color: var(--fnf-blue);
-    border: none; padding: 6px 2px;
-    font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
-  }
-  .fnf-btn-back::before { content: '‹ '; }
-  .fnf-btn-back:hover { text-decoration: underline; }
-
-  .fnf-field-error {
-    color: var(--fnf-error); font-size: 13px; margin-top: 4px; display: none;
-  }
-  .fnf-field-error.show { display: block; }
-
-  /* ── INPUTS DE CONTATO (etapa final) ── */
-  .fnf-input-label {
-    display: block; font-size: 13px; font-weight: 600;
-    color: var(--fnf-muted); margin: 14px 0 6px;
-  }
-  .fnf-step .fnf-input-label:first-of-type { margin-top: 4px; }
-  .fnf-input {
-    width: 100%;
-    background: var(--fnf-card);
-    border: 1px solid var(--fnf-line-2);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-family: inherit; font-size: 15px; color: var(--fnf-text);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .fnf-input::placeholder { color: #8a8d91; }
-  .fnf-input:focus {
-    outline: none; border-color: var(--fnf-blue);
-    box-shadow: 0 0 0 2px rgba(24,119,242,0.15);
-  }
-  .fnf-btn-enviar {
-    width: 100%; margin-top: 18px;
-    background: var(--fnf-blue); color: #fff;
-    border: none; border-radius: 8px;
-    padding: 13px 16px;
-    font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
-    transition: background 0.15s ease;
-  }
-  .fnf-btn-enviar:hover { background: var(--fnf-blue-dark); }
-
-  .fnf-status-msg { display: none; text-align: center; padding: 28px 10px; }
-  .fnf-status-msg.show { display: block; }
-  .fnf-spinner {
-    width: 36px; height: 36px;
-    border: 3px solid var(--fnf-line); border-top-color: var(--fnf-blue);
-    border-radius: 50%; margin: 0 auto 16px; animation: fnfSpin 0.8s linear infinite;
-  }
-  @keyframes fnfSpin { to { transform: rotate(360deg); } }
-  .fnf-status-msg p { font-size: 16px; color: var(--fnf-text); font-weight: 500; }
-
-  /* ── FOOTER ── */
-  .fnf-footer {
-    display: flex; align-items: center; gap: 7px;
-    padding: 12px 20px 16px;
-    border-top: 1px solid var(--fnf-line);
-    font-size: 12px; color: var(--fnf-muted);
-  }
-  .fnf-footer-lock { font-size: 12px; }
-
+  .se-btn-back:hover { border-color: #0a0a0a; color: #0a0a0a; }
+  .se-field-error { color: var(--se-error); font-size: 12px; margin: -12px 0 14px; display: none; }
+  .se-field-error.show { display: block; }
+  .se-status-msg { display: none; text-align: center; padding: 30px 10px; }
+  .se-status-msg.show { display: block; }
+  .se-spinner { width: 38px; height: 38px; border: 3px solid rgba(10,10,10,0.12); border-top-color: var(--se-gold); border-radius: 50%; margin: 0 auto 18px; animation: seSpin 0.8s linear infinite; }
+  @keyframes seSpin { to { transform: rotate(360deg); } }
+  .se-status-msg p { font-family: 'Albert Sans', sans-serif; font-size: 17px; color: var(--se-text); font-weight: 500; }
   @media (max-width: 600px) {
-    .fnf-overlay { padding: 0; }
-    .fnf-modal { max-width: 100%; min-height: 100%; margin: 0; }
-    .fnf-form-wrap { border-radius: 0; box-shadow: none; }
-    .fnf-close { top: 8px; right: 8px; }
-    .fnf-header-img { height: 160px; }
-    .fnf-step-title { font-size: 18px; }
+    .se-form-overlay { padding: 24px 12px; }
+    .se-form-body { padding: 30px 22px; }
+    .se-step-title { font-size: 20px; }
+    .se-form-close { top: 6px; right: 6px; }
   }
 </style>
