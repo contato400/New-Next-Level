@@ -8,18 +8,17 @@
   var TOTAL_ETAPAS_FUNIL = 7;
 
   /* ───────── REDIRECTS ─────────
-     Lógica atual (conforme instrução): qualificado e desqualificado
-     apontam para a MESMA página — se-fdcalend-mql. A estrutura por
-     tipo/faturamento/plantão foi mantida para permitir diferenciar
-     os destinos depois (basta trocar cada constante abaixo). */
-  var URL_QUALIFICADO   = 'https://nextlevelformed.com.br/se-fdcalend-mql/';
-  var URL_DESQUALIFICADO = 'https://nextlevelformed.com.br/se-fdcalend-mql/';
-
-  var URL_MED_MQL     = URL_QUALIFICADO;
-  var URL_MED_PLANTAO = URL_QUALIFICADO;
-  var URL_MED_DESQ    = URL_DESQUALIFICADO;
-  var URL_NM_MQL      = URL_QUALIFICADO;
-  var URL_NM_DESQ     = URL_DESQUALIFICADO;
+     Destinos por tipo x faturamento x plantão:
+       MÉDICO ≥30k               -> se-fdcalend-mql (calendário + evento MQL)
+       MÉDICO <30k + plantão Sim -> se-fdcalend-plantao (calendário)
+       MÉDICO <30k + plantão Não -> pular-a-fila-ses (obrigado / pular fila)
+       NÃO-MÉDICO ≥30k           -> se-fdcalend (calendário, sem MQL)
+       NÃO-MÉDICO <30k           -> pular-a-fila-ses */
+  var URL_MED_MQL     = 'https://nextlevelformed.com.br/se-fdcalend-mql/';
+  var URL_MED_PLANTAO = 'https://nextlevelformed.com.br/se-fdcalend-plantao/';
+  var URL_MED_DESQ    = 'https://nextlevelformed.com.br/pular-a-fila-ses/';
+  var URL_NM_MQL      = 'https://nextlevelformed.com.br/se-fdcalend/';
+  var URL_NM_DESQ     = 'https://nextlevelformed.com.br/pular-a-fila-ses/';
 
   /* ───────── UTMs DE TRACKEAMENTO ─────────
      Captura da URL, persiste no localStorage e envia no payload do webhook. */
